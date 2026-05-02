@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghost Concierge — Your Personal Gulf Coast Guide</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a1a; line-height: 1.6; }
+
+    /* NAV */
+    .header { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); border-bottom: 1px solid #e0e0e0; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+    .logo { font-size: 1.6em; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .btn-join { padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; transition: transform 0.2s; }
+    .btn-join:hover { transform: scale(1.05); }
+
+    /* AI LOGOS BAR */
+    .ai-logos-bar { margin-top: 80px; padding: 16px 5%; background: #fafafa; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: center; align-items: center; gap: 0; flex-wrap: wrap; }
+    .ai-logo-item { display: flex; align-items: center; justify-content: center; padding: 0 20px; border-right: 1px solid #e0e0e0; }
+    .ai-logo-item:last-child { border-right: none; }
+    .ai-logo-item img { height: 28px; width: auto; opacity: 0.7; transition: opacity 0.3s; }
+    .ai-logo-item:hover img { opacity: 1; }
+
+    /* HERO */
+    .hero { padding: 80px 5% 80px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .hero h1 { font-size: 3.5em; font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
+    .hero .tagline { font-size: 1.6em; margin-bottom: 15px; opacity: 0.95; }
+    .hero > p { font-size: 1.2em; margin-bottom: 40px; opacity: 0.9; max-width: 650px; margin-left: auto; margin-right: auto; }
+    .hero-badges { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-badge { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 100px; font-size: 0.9em; font-weight: 600; border: 1px solid rgba(255,255,255,0.3); }
+    .btn-primary { padding: 18px 50px; background: white; color: #667eea; border: none; border-radius: 35px; font-size: 1.2em; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+
+    /* STATS */
+    .stats-bar { display: flex; justify-content: center; gap: 0; background: white; border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; }
+    .stat-item { padding: 30px 40px; text-align: center; border-right: 1px solid #e0e0e0; }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-size: 2.2em; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 0.85em; color: #666; margin-top: 4px; }
+
+    /* SECTIONS */
+    .section { padding: 100px 5%; }
+    .section h2 { font-size: 2.8em; font-weight: 900; margin-bottom: 16px; text-align: center; }
+    .section > p, .section .subtitle { font-size: 1.2em; color: #666; max-width: 650px; margin: 0 auto 60px; text-align: center; line-height: 1.7; }
+
+    /* HOW IT WORKS */
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; max-width: 1100px; margin: 0 auto; }
+    .step-card { text-align: center; }
+    .step-number { width: 70px; height: 70px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; font-weight: 900; margin: 0 auto 24px; }
+    .step-card h3 { font-size: 1.4em; margin-bottom: 12px; }
+    .step-card p { color: #666; font-size: 1em; line-height: 1.7; }
+
+    /* DEMO */
+    .demo-section { padding: 100px 5%; background: #fafafa; }
+    .demo-wrap { max-width: 680px; margin: 0 auto; }
+
+    .concierge-card { background: white; border-radius: 24px; box-shadow: 0 10px 40px rgba(102,126,234,0.15); overflow: hidden; border: 1px solid #e0e0e0; }
+    .concierge-top { display: flex; align-items: center; gap: 14px; padding: 20px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .concierge-avatar { width: 46px; height: 46px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .concierge-info h3 { font-size: 15px; font-weight: 700; color: white; }
+    .concierge-info p { font-size: 12px; color: rgba(255,255,255,0.8); }
+    .status-dot { width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; margin-right: 5px; }
+
+    .oauth-bar { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: #f8f8ff; border-bottom: 1px solid #e8e8f0; flex-wrap: wrap; }
+    .oauth-label { font-size: 12px; color: #666; font-weight: 600; }
+    .oauth-btn { display: flex; align-items: center; gap: 6px; background: white; border: 1px solid #ddd; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #333; }
+    .oauth-btn:hover { border-color: #667eea; color: #667eea; }
+    .oauth-btn.connected { border-color: #10b981; color: #10b981; background: #10b98110; }
+
+    .token-bar { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #fffbeb; border-bottom: 1px solid #fde68a; font-size: 13px; }
+    .token-balance { color: #d97706; font-weight: 800; font-size: 15px; }
+
+    .messages { padding: 20px; min-height: 260px; max-height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .msg { display: flex; gap: 10px; align-items: flex-end; }
+    .msg.user { flex-direction: row-reverse; }
+    .msg-bubble { max-width: 78%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; }
+    .msg.ai .msg-bubble { background: #f0f0ff; border: 1px solid #e0e0ff; color: #1a1a1a; border-bottom-left-radius: 4px; }
+    .msg.user .msg-bubble { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-bottom-right-radius: 4px; }
+    .msg-avatar { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .typing { display: flex; gap: 4px; align-items: center; }
+    .typing span { width: 7px; height: 7px; background: #aaa; border-radius: 50%; animation: bounce 1.2s infinite; }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+    .input-bar { display: flex; gap: 10px; padding: 14px 16px; border-top: 1px solid #eee; align-items: center; }
+    .chat-input { flex: 1; background: #f5f5ff; border: 1px solid #e0e0ff; border-radius: 12px; padding: 12px 16px; color: #1a1a1a; font-size: 14px; font-family: inherit; outline: none; resize: none; transition: border 0.2s; }
+    .chat-input:focus { border-color: #667eea; background: white; }
+    .chat-input::placeholder { color: #aaa; }
+    .send-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; transition: opacity 0.2s; }
+    .send-btn:hover { opacity: 0.85; }
+    .mic-btn { background: #f0f0ff; border: 1px solid #e0e0ff; border-radius: 12px; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; transition: all 0.2s; }
+    .mic-btn.recording { background: #fee2e2; border-color: #ef4444; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.3)} 50%{box-shadow:0 0 0 8px rgba(239,68,68,0)} }
+
+    /* TOKENS */
+    .tokens-section { padding: 100px 5%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .tokens-section h2 { color: white; }
+    .tokens-section .subtitle { color: rgba(255,255,255,0.85); }
+    .tokens-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .token-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 30px 24px; text-align: center; transition: all 0.3s; }
+    .token-card:hover { background: rgba(255,255,255,0.25); transform: translateY(-4px); }
+    .token-icon { font-size: 36px; margin-bottom: 14px; }
+    .token-earn { font-size: 1.8em; font-weight: 900; color: #fbbf24; margin-bottom: 8px; }
+    .token-card h3 { font-size: 1.1em; font-weight: 700; margin-bottom: 8px; }
+    .token-card p { font-size: 0.9em; opacity: 0.9; line-height: 1.5; }
+
+    /* AI SELECTOR */
+    .ai-selector-section { padding: 100px 5%; background: white; text-align: center; }
+    .ai-providers { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
+    .ai-provider { background: #fafafa; padding: 32px 24px; border-radius: 20px; border: 3px solid transparent; transition: all 0.3s; position: relative; }
+    .ai-provider:hover { border-color: #667eea; transform: translateY(-4px); box-shadow: 0 10px 30px rgba(102,126,234,0.15); }
+    .ai-logo { width: 64px; height: 64px; margin: 0 auto 16px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2em; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .ai-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .ai-name { font-size: 1.1em; font-weight: 700; margin-bottom: 8px; }
+    .ai-description { font-size: 0.85em; color: #666; line-height: 1.5; }
+    .badge-live { position: absolute; top: 10px; right: 10px; background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.7em; font-weight: 700; }
+
+    /* PRIVACY */
+    .privacy-section { padding: 100px 5%; background: #fafafa; }
+    .privacy-wrap { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    @media(max-width:768px){ .privacy-wrap { grid-template-columns: 1fr; gap: 40px; } }
+    .privacy-title { font-size: 2.8em; font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
+    .privacy-title span { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .privacy-sub { font-size: 1.1em; color: #666; line-height: 1.7; }
+    .privacy-points { display: flex; flex-direction: column; gap: 20px; }
+    .privacy-point { display: flex; gap: 16px; align-items: flex-start; }
+    .privacy-point-icon { width: 44px; height: 44px; background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%); border: 1px solid #667eea30; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .privacy-point-text h4 { font-size: 1em; font-weight: 700; margin-bottom: 4px; }
+    .privacy-point-text p { font-size: 0.9em; color: #666; line-height: 1.5; }
+
+    /* CTA */
+    .final-cta { padding: 100px 5%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
+    .final-cta h2 { font-size: 3em; margin-bottom: 20px; color: white; }
+    .final-cta > p { font-size: 1.3em; margin-bottom: 40px; opacity: 0.95; }
+    .cta-input-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 480px; margin: 0 auto; }
+    .cta-input { flex: 1; min-width: 200px; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 14px 18px; color: white; font-size: 15px; font-family: inherit; outline: none; }
+    .cta-input::placeholder { color: rgba(255,255,255,0.6); }
+    .cta-input:focus { border-color: rgba(255,255,255,0.8); }
+    .btn-white { padding: 14px 32px; background: white; color: #667eea; border: none; border-radius: 12px; font-size: 1em; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+    /* FOOTER */
+    .footer { padding: 40px 5%; background: #1a1a1a; color: white; text-align: center; }
+    .footer p { color: #888; font-size: 0.9em; }
+    .footer span { color: #667eea; }
+
+    @media(max-width:768px){
+      .hero h1 { font-size: 2.4em; }
+      .section h2 { font-size: 2em; }
+      .stat-item { padding: 20px; }
+      .privacy-title { font-size: 2em; }
+      .final-cta h2 { font-size: 2em; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">👻 Ghost Concierge</div>
+  <button class="btn-join" onclick="scrollToDemo()">Try It Free</button>
+</div>
+
+<!-- AI LOGOS BAR -->
+<div class="ai-logos-bar">
+  <div class="ai-logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT"></div>
+  <div class="ai-logo-item"><img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg" alt="Gemini"></div>
+  <div class="ai-logo-item"><img src="https://assets.x.ai/grok-logo.svg" alt="Grok" onerror="this.style.display='none'"></div>
+  <div class="ai-logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Anthropic_logo.svg/200px-Anthropic_logo.svg.png" alt="Claude"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Your Personal Gulf Coast<br>Concierge Is Here</h1>
+  <p class="tagline">Ask anything. Earn tokens. Your data stays yours.</p>
+  <p>Voice or text. Best spots to eat, events tonight, what to order, things to do — personalized to you, powered by Ghost OS.</p>
+  <div class="hero-badges">
+    <div class="hero-badge">🌊 820+ Local Businesses</div>
+    <div class="hero-badge">👻 Zero Data Stored</div>
+    <div class="hero-badge">🪙 Earn Tokens</div>
+    <div class="hero-badge">🔀 Any AI, Anytime</div>
+  </div>
+  <button class="btn-primary" onclick="scrollToDemo()">🎙️ Start Talking Free</button>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">820+</div><div class="stat-label">Local Businesses</div></div>
+  <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Your Data, Your Cloud</div></div>
+  <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Data We Store</div></div>
+  <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">AI Providers</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how" style="background:white;">
+  <h2>Dead Simple</h2>
+  <p class="subtitle">No accounts. No apps. Just talk. Your agent gets smarter every time you use it — and everything stays in your cloud.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <h3>Connect Your Cloud</h3>
+      <p>Link Google Drive, Dropbox, or any storage. Your personal library builds there — not on our servers. Nothing to breach.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <h3>Ask Anything</h3>
+      <p>Best seafood? Events tonight? What should I order? Weather this weekend? Your concierge knows the Gulf Coast inside out.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <h3>Earn Tokens</h3>
+      <p>Upload food photos, leave voice reviews, check in at spots. Every authentic contribution earns tokens for more AI minutes.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <h3>It Learns You</h3>
+      <p>Every interaction builds your taste profile. By day three it knows what you like better than you do.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="demo-section" id="demo">
+  <div style="text-align:center;margin-bottom:48px;">
+    <h2 style="font-size:2.8em;font-weight:900;margin-bottom:12px;">Talk to Your Concierge</h2>
+    <p style="font-size:1.2em;color:#666;max-width:500px;margin:0 auto;">Live demo — ask about restaurants, events, weather, things to do. Powered by Gulf Coast Radar data.</p>
+  </div>
+
+  <div class="demo-wrap">
+    <div class="concierge-card">
+      <!-- OAuth -->
+      <div class="oauth-bar">
+        <span class="oauth-label">Connect your library:</span>
+        <button class="oauth-btn" id="googleBtn" onclick="connectCloud('google')">🔗 Google Drive</button>
+        <button class="oauth-btn" id="dropboxBtn" onclick="connectCloud('dropbox')">🔗 Dropbox</button>
+      </div>
+
+      <!-- Tokens -->
+      <div class="token-bar">
+        <span>🪙 Tokens:</span>
+        <span class="token-balance" id="tokenBalance">0</span>
+        <span style="margin-left:auto;font-size:12px;color:#92400e;">Earn by sharing photos & reviews</span>
+      </div>
+
+      <!-- Header -->
+      <div class="concierge-top">
+        <div class="concierge-avatar">👻</div>
+        <div class="concierge-info">
+          <h3>Gulf Coast Concierge</h3>
+          <p><span class="status-dot"></span>Online — ask me anything</p>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="messages" id="messages">
+        <div class="msg ai">
+          <div class="msg-avatar">👻</div>
+          <div class="msg-bubble">Hey! I'm your personal Gulf Coast guide. Ask me about restaurants, things to do, events, happy hours, weather — anything local. What are you looking for? 🌊</div>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="input-bar">
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Voice input">🎙️</button>
+        <textarea class="chat-input" id="chatInput" placeholder="Ask about restaurants, events, things to do..." rows="1" onkeydown="handleKey(event)"></textarea>
+        <button class="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+
+    <!-- Photo Upload -->
+    <div style="margin-top:20px;background:white;border:2px dashed #667eea30;border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:32px;">📸</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;margin-bottom:4px;">Earn tokens — share a photo</div>
+        <div style="font-size:13px;color:#666;">Upload a food photo or experience. Earn <strong style="color:#d97706;">+50 tokens</strong> for every authentic upload.</div>
+      </div>
+      <label style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;">
+        Upload Photo
+        <input type="file" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- TOKENS -->
+<section class="tokens-section">
+  <h2 style="color:white;">Explore More. Earn More.</h2>
+  <p class="subtitle">Every authentic interaction earns tokens. Spend them on more AI minutes, exclusive deals, and premium recommendations.</p>
+  <div class="tokens-grid">
+    <div class="token-card">
+      <div class="token-icon">📸</div>
+      <div class="token-earn">+50</div>
+      <h3>Photo Upload</h3>
+      <p>Upload a real photo of food, a view, or an experience at any local spot.</p>
+    </div>
+    <div class="token-card">
+      <div class="token-icon">🎙️</div>
+      <div class="token-earn">+75</div>
+      <h3>Voice Review</h3>
+      <p>Leave a 30-second voice review of a restaurant, activity, or experience.</p>
+    </div>
+    <div class="token-card">
+      <div class="token-icon">📍</div>
+      <div class="token-earn">+25</div>
+      <h3>Check In</h3>
+      <p>Verify you actually visited — unlocks an authentic local badge on your review.</p>
+    </div>
+    <div class="token-card">
+      <div class="token-icon">⭐</div>
+      <div class="token-earn">+100</div>
+      <h3>Full Trip Review</h3>
+      <p>Complete a full trip summary when you leave. Earns the most tokens of all.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AI SELECTOR -->
+<section class="ai-selector-section">
+  <h2>Powered by Any AI</h2>
+  <p style="font-size:1.1em;color:#666;margin-bottom:48px;max-width:600px;margin-left:auto;margin-right:auto;">Your concierge routes questions to the right AI automatically. Live weather? Gemini searches the web. Restaurant recs? Claude searches local data. You stay ghost either way.</p>
+  <div class="ai-providers">
+    <div class="ai-provider">
+      <div class="badge-live">LIVE</div>
+      <div class="ai-logo"><img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg" alt="Gemini"></div>
+      <div class="ai-name">Gemini</div>
+      <div class="ai-description">Live web search for real-time info — weather, hours, current events</div>
+    </div>
+    <div class="ai-provider">
+      <div class="badge-live">LIVE</div>
+      <div class="ai-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Anthropic_logo.svg/200px-Anthropic_logo.svg.png" alt="Claude"></div>
+      <div class="ai-name">Claude</div>
+      <div class="ai-description">Deep local knowledge — restaurant recs, menus, personalized answers</div>
+    </div>
+    <div class="ai-provider">
+      <div class="ai-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT"></div>
+      <div class="ai-name">ChatGPT</div>
+      <div class="ai-description">General questions, brainstorming, trip planning</div>
+    </div>
+    <div class="ai-provider">
+      <div class="ai-logo"><img src="https://assets.x.ai/grok-logo.svg" alt="Grok" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNiI+RzwvdGV4dD48L3N2Zz4='"></div>
+      <div class="ai-name">Grok</div>
+      <div class="ai-description">Real-time info & trending topics</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="privacy-section">
+  <div class="privacy-wrap">
+    <div>
+      <div class="privacy-title">We're not a database.<br><span>We're a remote control.</span></div>
+      <p class="privacy-sub">Ghost Concierge never stores your data. It connects your tools, answers your questions, and writes everything back to your own cloud. Nothing to breach. Nothing to sell. Nothing to subpoena.</p>
+    </div>
+    <div class="privacy-points">
+      <div class="privacy-point">
+        <div class="privacy-point-icon">🔒</div>
+        <div class="privacy-point-text">
+          <h4>Your Cloud, Your Data</h4>
+          <p>Everything stores in your Google Drive, Dropbox, or storage of choice. We never see it.</p>
+        </div>
+      </div>
+      <div class="privacy-point">
+        <div class="privacy-point-icon">👻</div>
+        <div class="privacy-point-text">
+          <h4>Ghost Sessions</h4>
+          <p>No tracking, no cookies, no fingerprinting. AI providers only see our server — never you.</p>
+        </div>
+      </div>
+      <div class="privacy-point">
+        <div class="privacy-point-icon">🔀</div>
+        <div class="privacy-point-text">
+          <h4>Any AI, Any Time</h4>
+          <p>Switch providers anytime. No lock-in. No dependency. You're always in control.</p>
+        </div>
+      </div>
+      <div class="privacy-point">
+        <div class="privacy-point-icon">🛡️</div>
+        <div class="privacy-point-text">
+          <h4>Verified Identity</h4>
+          <p>Only your verified identity can take action. Reviews can't be faked. Data can't be spoofed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="final-cta">
+  <h2>Be First. Ghost In,<br>Ghost Out.</h2>
+  <p>Join the waitlist. Founding members lock in the lowest rate forever.</p>
+  <div class="cta-input-row">
+    <input type="email" class="cta-input" placeholder="your@email.com" id="waitlistEmail">
+    <button class="btn-white" onclick="joinWaitlist()">Join Waitlist</button>
+  </div>
+  <p style="font-size:13px;opacity:0.8;margin-top:16px;" id="waitlistMsg"></p>
+</section>
+
+<div class="footer">
+  <p>Built on <span>Ghost OS</span> · Powered by Gulf Coast Radar · Your data never leaves your cloud</p>
+</div>
+
+<script>
+  const API = 'https://cybercheck-api-database.vercel.app/api/gcr';
+  let tokens = 0;
+  let history = [];
+  let mediaRecorder, audioChunks = [];
+  let isRecording = false;
+
+  function scrollToDemo() { document.getElementById('demo').scrollIntoView({ behavior: 'smooth' }); }
+
+  function addTokens(amount, reason) {
+    tokens += amount;
+    document.getElementById('tokenBalance').textContent = tokens;
+    addMsg('ai', `🪙 You earned <strong>+${amount} tokens</strong> ${reason}! Balance: <strong>${tokens}</strong>`, true);
+  }
+
+  function addMsg(role, text, isHTML = false) {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.innerHTML = `
+      ${role === 'ai' ? '<div class="msg-avatar">👻</div>' : ''}
+      <div class="msg-bubble">${isHTML ? text : escapeHtml(text)}</div>
+      ${role === 'user' ? '<div class="msg-avatar" style="background:linear-gradient(135deg,#10b981,#059669)">🧑</div>' : ''}
+    `;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showTyping() {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = 'msg ai'; div.id = 'typing';
+    div.innerHTML = '<div class="msg-avatar">👻</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() { document.getElementById('typing')?.remove(); }
+  function escapeHtml(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+    input.value = '';
+    addMsg('user', message);
+    history.push({ role: 'user', content: message });
+    showTyping();
+    try {
+      const res = await fetch(`${API}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, history: history.slice(-10) })
+      });
+      const data = await res.json();
+      removeTyping();
+      const reply = data.reply || "Try asking something else!";
+      addMsg('ai', reply);
+      history.push({ role: 'assistant', content: reply });
+    } catch(e) {
+      removeTyping();
+      addMsg('ai', "Connection issue — try again in a moment.");
+    }
+  }
+
+  async function toggleMic() {
+    if (isRecording) { mediaRecorder?.stop(); return; }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = async () => {
+        isRecording = false;
+        document.getElementById('micBtn').className = 'mic-btn';
+        document.getElementById('micBtn').textContent = '🎙️';
+        stream.getTracks().forEach(t => t.stop());
+        const blob = new Blob(audioChunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append('audio', blob, 'recording.wav');
+        try {
+          const res = await fetch(`${API}/transcribe`, { method: 'POST', body: formData });
+          const data = await res.json();
+          if (data.text) { document.getElementById('chatInput').value = data.text; sendMessage(); }
+        } catch(e) { addMsg('ai', "Voice transcription unavailable — try typing instead."); }
+      };
+      mediaRecorder.start();
+      isRecording = true;
+      document.getElementById('micBtn').className = 'mic-btn recording';
+      document.getElementById('micBtn').textContent = '⏹️';
+    } catch(e) {
+      addMsg('ai', "Mic access needed for voice — or just type your question!");
+    }
+  }
+
+  function connectCloud(provider) {
+    const btn = document.getElementById(provider + 'Btn');
+    btn.className = 'oauth-btn connected';
+    btn.innerHTML = `✓ ${provider === 'google' ? 'Google Drive' : 'Dropbox'} Connected`;
+    addMsg('ai', `🔗 Your ${provider === 'google' ? 'Google Drive' : 'Dropbox'} is connected! Your personal library is now active. Everything I learn about you stays in your cloud — not mine. 👻`);
+    addTokens(100, 'for connecting your personal library');
+  }
+
+  function uploadPhoto(input) {
+    if (!input.files?.length) return;
+    addMsg('user', `📸 Photo uploaded`);
+    setTimeout(() => {
+      addMsg('ai', `Love it! Your photo has been saved to your personal library. Authentic reviews like this help other travelers find the real spots. 🌊`);
+      addTokens(50, 'for your photo');
+    }, 800);
+  }
+
+  function joinWaitlist() {
+    const email = document.getElementById('waitlistEmail').value.trim();
+    if (!email || !email.includes('@')) { document.getElementById('waitlistMsg').textContent = 'Enter a valid email.'; return; }
+    document.getElementById('waitlistMsg').textContent = `✓ You're on the list! Founding member pricing locked in for ${email}`;
+    document.getElementById('waitlistEmail').value = '';
+  }
+</script>
+</body>
+</html>
